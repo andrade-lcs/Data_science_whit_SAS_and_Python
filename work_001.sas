@@ -52,11 +52,19 @@ IF co2emissions<10000000000 AND co2emissions>1000000000 THEN co2emissions=5;
 IF co2emissions>10000000000 THEN co2emissions=6;
 
 IF oilperperson<0.01 THEN oilperperson=.;
-IF oilperperson<0.1 AND oilperperson>0.01 THEN oilperperson=1;
-IF oilperperson<1.0  AND oilperperson>0.1 THEN oilperperson=2;
+IF oilperperson<0.1  AND oilperperson>0.01 THEN oilperperson=1;
+IF oilperperson<1.0  AND oilperperson>0.1 THEN oilperperson=-1;
 IF oilperperson<10.0 AND oilperperson>1.0 THEN oilperperson=3;
 IF oilperperson>10.0 THEN oilperperson=4;
+IF oilperperson=-1 THEN oilperperson=2;
 
-PROC FREQ; /*ORDER=FREQ*/;
-TABLES /*country incomeperperson lifeexpectancy femaleemployrate employrate urbanrate internetuserate co2emissions*/ oilperperson /*relectricperperson*/;
+IF relectricperperson<=0 THEN relectricperperson=.;
+IF relectricperperson<10 AND relectricperperson>0 THEN relectricperperson=1;
+IF relectricperperson<100  AND relectricperperson>10 THEN relectricperperson=2;
+IF relectricperperson<1000 AND relectricperperson>100 THEN relectricperperson=3;
+IF relectricperperson<10000 AND relectricperperson>1000 THEN relectricperperson=4;
+IF relectricperperson>10000 THEN relectricperperson=5;
+
+PROC FREQ;
+TABLES incomeperperson lifeexpectancy femaleemployrate employrate urbanrate internetuserate co2emissions oilperperson relectricperperson;
 RUN;
