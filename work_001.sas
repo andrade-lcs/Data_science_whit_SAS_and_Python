@@ -1,7 +1,6 @@
 PROC IMPORT datafile='/home/u59699361/gapminder.csv' OUT = imported REPLACE;
 DATA new;
 SET imported;
-PROC SORT; by country;
 PROC FREQ DATA = imported;
 LABEL 	/*Economy indicators*/
 		country="The country"
