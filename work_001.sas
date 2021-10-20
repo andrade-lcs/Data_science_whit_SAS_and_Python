@@ -14,6 +14,7 @@ LABEL 	/*Economy indicators*/
 		co2emissions="cumulative CO2 emission (metric tons)"
 		oilperperson="oil Consumption per capita (tonnes per year and person)"
 		relectricperperson="residential electricity consumption, per person (kWh)";
+		
 /*Clustering the variables*/
 IF incomeperperson<100 THEN incomeperperson=.;
 IF incomeperperson<1000 AND incomeperperson>100 THEN incomeperperson=1;
@@ -43,13 +44,13 @@ IF internetuserate<10 THEN internetuserate=.;
 IF internetuserate<=50 AND internetuserate>10 THEN internetuserate=1;
 IF internetuserate>50 THEN internetuserate=2;
 
-IF co2emissions<100000 THEN co2emissions=.;
-IF co2emissions<1000000     AND co2emissions>100000 THEN co2emissions=1;
-IF co2emissions<10000000    AND co2emissions>1000000 THEN co2emissions=2;
-IF co2emissions<100000000   AND co2emissions>10000000 THEN co2emissions=3;
-IF co2emissions<1000000000  AND co2emissions>100000000 THEN co2emissions=4;
-IF co2emissions<10000000000 AND co2emissions>1000000000 THEN co2emissions=5;
-IF co2emissions>10000000000 THEN co2emissions=6;
+IF co2emissions<=100000 THEN co2emissions=.;
+IF co2emissions<=1000000     AND co2emissions>100000 THEN co2emissions=1;
+IF co2emissions<=10000000    AND co2emissions>1000000 THEN co2emissions=2;
+IF co2emissions<=100000000   AND co2emissions>10000000 THEN co2emissions=3;
+IF co2emissions<=1000000000  AND co2emissions>100000000 THEN co2emissions=4;
+IF co2emissions<=10000000000 AND co2emissions>1000000000 THEN co2emissions=5;
+IF co2emissions>=10000000000 THEN co2emissions=6;
 
 IF oilperperson<0.01 THEN oilperperson=.;
 IF oilperperson<0.1  AND oilperperson>0.01 THEN oilperperson=1;
@@ -65,6 +66,71 @@ IF relectricperperson<1000 AND relectricperperson>100 THEN relectricperperson=3;
 IF relectricperperson<10000 AND relectricperperson>1000 THEN relectricperperson=4;
 IF relectricperperson>10000 THEN relectricperperson=5;
 
+/*Formating Variables*/
+PROC FORMAT;
+VALUE FORMAT_A
+1 = 'X > 1000'
+2 = '1000 < X < 10000'
+3 = '10000< X < 100000'
+4 = 'X > 100000';
+
+VALUE FORMAT_B
+1 = 'X < 60'
+2 = '60<= X < 70'
+3 = '70<= X < 80'
+4 = 'X >= 80';
+
+VALUE FORMAT_C
+1 = 'X < 50'
+2 = 'X >= 50';
+
+VALUE FORMAT_D
+1 = 'X < 10000'
+2 = '10000 <= X < 100000'
+3 = '100000<= X < 1000000'
+4 = '1000000<= X < 10000000'
+5 = '10000000<= X < 100000000'
+6 = 'X>=100000000';
+
+VALUE FORMAT_E
+1 = 'X < 0.1'
+2 = '0.1 <= X < 1'
+3 = '1 <= X < 10'
+4 = 'X>=10';
+
+VALUE FORMAT_F
+1 = 'X < 10'
+2 = '10 <= X < 100'
+3 = '100<= X < 1000'
+4 = '1000<= X < 10000'
+5 = 'X>=10000';
+
 PROC FREQ;
-TABLES incomeperperson lifeexpectancy femaleemployrate employrate urbanrate internetuserate co2emissions oilperperson relectricperperson;
+TABLE incomeperperson; 
+FORMAT incomeperperson FORMAT_A.;
+
+TABLE lifeexpectancy;
+FORMAT lifeexpectancy FORMAT_B.;
+ 
+TABLE femaleemployrate;
+FORMAT femaleemployrate FORMAT_C.;
+
+TABLE employrate;
+FORMAT employrate FORMAT_C.; 
+
+TABLE urbanrate;
+FORMAT urbanrate FORMAT_C.;
+
+TABLE internetuserate;
+FORMAT internetuserate FORMAT_C.;  
+
+TABLE co2emissions;
+FORMAT co2emissions FORMAT_D.;  
+
+TABLE oilperperson ;
+FORMAT oilperperson  FORMAT_E.;  
+
+TABLE relectricperperson;
+FORMAT relectricperperson FORMAT_F.;  
+
 RUN;
